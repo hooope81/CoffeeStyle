@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Red Love Cup",
+        "price": 25
+    },
+    {
+        "id": 2,
+        "name": "Black Tea Cup",
+        "price": 15
+    }
+]

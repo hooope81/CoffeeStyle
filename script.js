@@ -5,7 +5,7 @@ class List {
         this.list = list;
         this.goods = [];
         this.getJson(url);
-        this.render();
+        this.init();
     }
     getJson(url) {
         fetch(url)
@@ -14,25 +14,71 @@ class List {
                 this.goods = [...data];
                 this.render();
             })
-            
+
     }
     render() {
-        
+
         let block = document.querySelector(this.container);
         for (let item of this.goods) {
-            console.log(this.goods)
             let newObj = new this.list[this.constructor.name](item);
             block.insertAdjacentHTML('beforeend', newObj.render());
         }
     }
+    init() {
+        return false;
+    }
 }
 
 class ListPage extends List {
-    constructor(url = 'api/catalog.json', container = '.catalog') {
+    constructor(cart, url = 'api/catalog.json', container = '.catalog') {
         super(url, container);
-        
+        this.cart = cart;
+
     }
-    
+    init() {
+        document.querySelector(this.container).addEventListener('click', (e) => {
+            if (e.target.classList.contains('buy-btn')) {
+                this.cart.toAdd(e.target);
+            }
+        })
+
+    }
+
+}
+
+class ListCart extends List {
+    constructor(url = 'api/cart.json', container = '.cart') {
+        super(url, container);
+        this.getCart();
+    }
+    getCart() {
+        let cartBtn = document.querySelector('.btn-cart');
+        let cartBox = document.querySelector('.cart');
+        cartBtn.addEventListener('click', () => {
+            cartBox.classList.toggle('invisible');
+        })
+    }
+    toAdd(element) {
+        let find = this.goods.find(item => item.id == element.dataset.id);
+        if (find) {
+            find.quantity++;
+            this.toUpdateCart(find);
+        } else {
+            let product = {
+                id: element.dataset.id,
+                name: element.dataset.name,
+                price: element.dataset.price,
+                quantity: 1
+            }
+            this.goods = [product];
+            this.render();
+        }
+    }
+    toUpdateCart(element){
+        let block = document.querySelector(`.cart-box[data-id="${element.id}"]`);
+        block.querySelector('.cart-quantity').textContent = `${element.quantity}`;
+        block.querySelector('.cart-price').textContent = `${element.price * element.quantity}`;
+    }
 }
 
 class Card {
@@ -47,15 +93,41 @@ class Card {
             <img src="img/${this.id}.jpg">
             <h4>${this.name}</h4>
             <p>${this.price}</p>
+            <button class='buy-btn' data-id='${this.id}' data-name='${this.name}' data-price='${this.price}'>
+            ADD TO CART</button>
         </article>`
     }
 }
 
 class CardPage extends Card { }
 
-const constructorName = {
-    ListPage: CardPage,
-    // ListCart: CardCart
+class CardCart extends Card {
+    constructor(product) {
+        super(product);
+        this.quantity = product.quantity;
+    }
+    render() {
+        return `
+        <article class="cart-box" data-id="${this.id}">
+            <img src="img/${this.id}.jpg">
+            <div class="left-box">
+            <h4>${this.name}</h4>
+            <p>${this.price}</p>
+            <p class="cart-quantity">${this.quantity}</p>
+            </div>
+            <div class="right-box">
+            <h4 class="cart-price">${this.price * this.quantity}</h4>
+            <div>X</div>
+            </div>
+        </article>`
+    }
 }
 
-const page = new ListPage();
+
+const constructorName = {
+    ListPage: CardPage,
+    ListCart: CardCart
+}
+
+const cart = new ListCart();
+const page = new ListPage(cart);

@@ -2,11 +2,13 @@
     {
         "id": 1,
         "name": "Red Love Cup",
-        "price": 25
+        "price": 25,
+        "quantity": 1
     },
     {
         "id": 2,
         "name": "Black Tea Cup",
-        "price": 15
+        "price": 15,
+        "quantity": 2
     }
 ]

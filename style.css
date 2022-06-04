@@ -2,4 +2,24 @@
   margin: 0;
   padding: 0;
 }
+
+.cart-box {
+  position: relative;
+}
+
+.btn-cart {
+  cursor: pointer;
+}
+
+.cart {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  border: 1px solid red;
+}
+
+.invisible {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */

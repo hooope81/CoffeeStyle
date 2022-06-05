@@ -5,6 +5,7 @@ class List {
         this.list = list;
         this.goods = [];
         this.allproducts = [];
+        this.filtered = [];
         this.getJson(url);
         this.init();
     }
@@ -26,6 +27,19 @@ class List {
             block.insertAdjacentHTML('beforeend', newObj.render());
         }
     }
+    filter(value) {
+
+        const rule = new RegExp(value, 'i');
+        this.filtered = this.allproducts.filter(item => rule.test(item.name));
+        this.allproducts.forEach(item => {
+            const block = document.querySelector(`.product-box[data-id="${item.id}"]`);
+            if (!this.filtered.includes(item)) {
+                block.classList.add('invisible');
+            } else {
+                block.classList.remove('invisible');
+            }
+        })
+    }
     init() {
         return false;
     }
@@ -35,15 +49,19 @@ class ListPage extends List {
     constructor(cart, url = 'api/catalog.json', container = '.catalog') {
         super(url, container);
         this.cart = cart;
-
     }
     init() {
         document.querySelector(this.container).addEventListener('click', (e) => {
             if (e.target.classList.contains('buy-btn')) {
                 this.cart.toAdd(e.target);
             }
+        });
+        document.querySelector('.search-form').addEventListener('submit', e => {
+            e.preventDefault();
+            this.filter(document.querySelector('.search__input').value);
         })
     }
+
 
 }
 
@@ -108,7 +126,7 @@ class Card {
     }
     render() {
         return `
-        <article>
+        <article class="product-box" data-id='${this.id}'>
             <img src="img/${this.id}.jpg">
             <h4>${this.name}</h4>
             <p>${this.price}</p>
@@ -150,3 +168,4 @@ const constructorName = {
 
 const cart = new ListCart();
 const page = new ListPage(cart);
+

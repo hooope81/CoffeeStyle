@@ -4,6 +4,7 @@ class List {
         this.container = container;
         this.list = list;
         this.goods = [];
+        this.allproducts = [];
         this.getJson(url);
         this.init();
     }
@@ -21,6 +22,7 @@ class List {
         let block = document.querySelector(this.container);
         for (let item of this.goods) {
             let newObj = new this.list[this.constructor.name](item);
+            this.allproducts.push(newObj);
             block.insertAdjacentHTML('beforeend', newObj.render());
         }
     }
@@ -41,7 +43,6 @@ class ListPage extends List {
                 this.cart.toAdd(e.target);
             }
         })
-
     }
 
 }
@@ -59,7 +60,7 @@ class ListCart extends List {
         })
     }
     toAdd(element) {
-        let find = this.goods.find(item => item.id == element.dataset.id);
+        let find = this.allproducts.find(item => item.id == element.dataset.id);
         if (find) {
             find.quantity++;
             this.toUpdateCart(find);
@@ -74,10 +75,28 @@ class ListCart extends List {
             this.render();
         }
     }
-    toUpdateCart(element){
+    toRemove(element) {
+        let find = this.allproducts.find(item => item.id == element.dataset.id);
+        if (find.quantity > 1) {
+            find.quantity--;
+            this.toUpdateCart(find);
+        } else {
+            let index = this.allproducts.indexOf(find);
+            this.allproducts.splice(index, 1);
+            document.querySelector(`.cart-box[data-id="${find.id}"]`).remove();
+        }
+    }
+    toUpdateCart(element) {
         let block = document.querySelector(`.cart-box[data-id="${element.id}"]`);
         block.querySelector('.cart-quantity').textContent = `${element.quantity}`;
         block.querySelector('.cart-price').textContent = `${element.price * element.quantity}`;
+    }
+    init() {
+        document.querySelector(this.container).addEventListener('click', (e) => {
+            if (e.target.classList.contains('del')) {
+                this.toRemove(e.target);
+            }
+        })
     }
 }
 
@@ -117,7 +136,7 @@ class CardCart extends Card {
             </div>
             <div class="right-box">
             <h4 class="cart-price">${this.price * this.quantity}</h4>
-            <div>X</div>
+            <div class='del' data-id='${this.id}'>X</div>
             </div>
         </article>`
     }

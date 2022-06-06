@@ -1,5 +1,5 @@
 class List {
-    constructor(url, container, list = constructorName) {
+    constructor(url, container, list = list2) {
         this.url = url;
         this.container = container;
         this.list = list;
@@ -16,23 +16,21 @@ class List {
                 this.goods = [...data];
                 this.render();
             })
-
     }
     render() {
-
         let block = document.querySelector(this.container);
         for (let item of this.goods) {
             let newObj = new this.list[this.constructor.name](item);
             this.allproducts.push(newObj);
-            block.insertAdjacentHTML('beforeend', newObj.render());
+            block.insertAdjacentHTML('beforeend', newObj.render())
         }
     }
     filter(value) {
-
-        const rule = new RegExp(value, 'i');
+        let rule = new RegExp(value, 'i');
         this.filtered = this.allproducts.filter(item => rule.test(item.name));
         this.allproducts.forEach(item => {
-            const block = document.querySelector(`.product-box[data-id="${item.id}"]`);
+            let block = document.querySelector(`.product[data-id="${item.id}"]`);
+
             if (!this.filtered.includes(item)) {
                 block.classList.add('invisible');
             } else {
@@ -51,30 +49,34 @@ class ListPage extends List {
         this.cart = cart;
     }
     init() {
-        document.querySelector(this.container).addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-btn')) {
+        document.querySelector(this.container).addEventListener('click', e => {
+            if (e.target.classList.contains('product__btn')) {
                 this.cart.toAdd(e.target);
             }
-        });
+        })
+
         document.querySelector('.search-form').addEventListener('submit', e => {
             e.preventDefault();
             this.filter(document.querySelector('.search__input').value);
         })
     }
-
-
 }
 
 class ListCart extends List {
     constructor(url = 'api/cart.json', container = '.cart') {
         super(url, container);
-        this.getCart();
     }
-    getCart() {
-        let cartBtn = document.querySelector('.btn-cart');
-        let cartBox = document.querySelector('.cart');
-        cartBtn.addEventListener('click', () => {
-            cartBox.classList.toggle('invisible');
+    init() {
+        let btn = document.querySelector('.btn-cart');
+        let cart = document.querySelector('.cart');
+        btn.addEventListener('click', () => {
+            cart.classList.toggle('invisible');
+        })
+
+        document.querySelector(this.container).addEventListener('click', e => {
+            if (e.target.classList.contains('del')) {
+                this.toRemove(e.target);
+            }
         })
     }
     toAdd(element) {
@@ -83,13 +85,13 @@ class ListCart extends List {
             find.quantity++;
             this.toUpdateCart(find);
         } else {
-            let product = {
+            let obj = {
                 id: element.dataset.id,
                 name: element.dataset.name,
                 price: element.dataset.price,
                 quantity: 1
             }
-            this.goods = [product];
+            this.goods = [obj];
             this.render();
         }
     }
@@ -99,22 +101,15 @@ class ListCart extends List {
             find.quantity--;
             this.toUpdateCart(find);
         } else {
-            let index = this.allproducts.indexOf(find);
-            this.allproducts.splice(index, 1);
-            document.querySelector(`.cart-box[data-id="${find.id}"]`).remove();
+            this.allproducts.splice(this.allproducts.indexOf(find), 1);
+            document.querySelector(`.cart__inner[data-id="${element.dataset.id}"]`).remove();
         }
+
     }
     toUpdateCart(element) {
-        let block = document.querySelector(`.cart-box[data-id="${element.id}"]`);
-        block.querySelector('.cart-quantity').textContent = `${element.quantity}`;
-        block.querySelector('.cart-price').textContent = `${element.price * element.quantity}`;
-    }
-    init() {
-        document.querySelector(this.container).addEventListener('click', (e) => {
-            if (e.target.classList.contains('del')) {
-                this.toRemove(e.target);
-            }
-        })
+        let block = document.querySelector(`.cart__inner[data-id="${element.id}"]`);
+        block.querySelector('.cart__quantity').textContent = element.quantity;
+        block.querySelector('.cart__cost').textContent = element.price * element.quantity;
     }
 }
 
@@ -125,14 +120,16 @@ class Card {
         this.price = product.price;
     }
     render() {
-        return `
-        <article class="product-box" data-id='${this.id}'>
-            <img src="img/${this.id}.jpg">
+        return `<div class="product" data-id="${this.id}">
+            <img src="img/${this.id}.jpg" alt="some_img">
             <h4>${this.name}</h4>
             <p>${this.price}</p>
-            <button class='buy-btn' data-id='${this.id}' data-name='${this.name}' data-price='${this.price}'>
+            <button class="product__btn" 
+                data-id="${this.id}" 
+                data-name="${this.name}" 
+                data-price="${this.price}">
             ADD TO CART</button>
-        </article>`
+        </div>`
     }
 }
 
@@ -144,28 +141,20 @@ class CardCart extends Card {
         this.quantity = product.quantity;
     }
     render() {
-        return `
-        <article class="cart-box" data-id="${this.id}">
-            <img src="img/${this.id}.jpg">
-            <div class="left-box">
-            <h4>${this.name}</h4>
-            <p>${this.price}</p>
-            <p class="cart-quantity">${this.quantity}</p>
-            </div>
-            <div class="right-box">
-            <h4 class="cart-price">${this.price * this.quantity}</h4>
-            <div class='del' data-id='${this.id}'>X</div>
-            </div>
-        </article>`
+        return `<div class="cart__inner" data-id="${this.id}">
+        <img src="img/${this.id}.jpg" alt="some_img">
+        <h4>${this.name}</h4>
+        <p class="cart__quantity">${this.quantity}</p>
+        <p class="cart__cost">${this.price * this.quantity}</p>
+        <button class="del" data-id="${this.id}">X</button>
+    </div>`
     }
 }
 
 
-const constructorName = {
+const list2 = {
     ListPage: CardPage,
     ListCart: CardCart
 }
-
 const cart = new ListCart();
 const page = new ListPage(cart);
-

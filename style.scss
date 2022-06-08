@@ -1,6 +1,13 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Karla';
+    font-style: normal;
+}
+
+.wraper {
+    max-width: 1380px;
 }
 
 .product {
@@ -9,13 +16,44 @@
     width: 300px;
 }
 
+//heading
+.heading {
+    display: flex;
+    justify-content: center;
+
+    &__left {
+        & a {
+            font-size: 20px;
+            text-decoration: none;
+            color: #000;
+        }
+    }
+
+    &__right {
+        display: flex;
+        justify-content: space-between;
+
+        a {
+            text-decoration: none;
+            color: #1D1F2E;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    }
+}
+
 //cart
 .cart-box {
     position: relative;
 }
+
 .btn-cart {
     cursor: pointer;
 }
+
 .cart {
     position: absolute;
     display: block;
@@ -23,10 +61,10 @@
     right: 0;
     border: 1px solid red;
 }
+
 .del {
     cursor: pointer;
 }
-
 
 .invisible {
     display: none;

@@ -7,19 +7,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COFFEESTYLE</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/c5e0c0c72e.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="search">
-        <form action="#" class="search-form">
-            <input type="text" placeholder="Search" class="search__input">
-            <button type="submit"></button>
-        </form>
-    </div>
-    <div class="cart-box">
-        <p class="btn-cart">CART</p>
-        <div class="cart invisible"></div>
-    </div>
+    <header class="heading wraper">
+        <div class="heading__left">
+            <a href="/">CoffeeStyle.</a>
+        </div>
+        <div class="heading__right">
+            <div class="heading__link">
+                <a href="#">Home</a>
+                <a href="#">Our Products</a>
+                <a href="#">Blog</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Styleguide</a>
+            </div>
+            <div class="search">
+                <form action="#" class="search-form">
+                    <input type="text" placeholder="Search" class="search__input">
+                    <button type="submit"></button>
+                </form>
+            </div>
+            <div class="cart-box">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <p class="btn-cart">CART</p>
+                <div class="cart invisible"></div>
+            </div>
+        </div>
+    </header>
+
+
     <div class="catalog"></div>
     <script src="script.js"></script>
 </body>

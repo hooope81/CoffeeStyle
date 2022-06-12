@@ -123,7 +123,7 @@ class Card {
         return `<div class="product" data-id="${this.id}">
             <img src="img/${this.id}.jpg" alt="some_img">
             <h4>${this.name}</h4>
-            <p>${this.price}</p>
+            <p>$${this.price.toFixed(2)} USD</p>
             <button class="product__btn" 
                 data-id="${this.id}" 
                 data-name="${this.name}" 

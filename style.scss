@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Karla';
-    font-style: '';
+    font-style: normal;
 }
 
 .wraper {
@@ -23,6 +23,7 @@
     justify-content: center;
     padding: 28px;
     gap: 10px;
+    background-color: #fff;
 
     &__left {
         display: flex;
@@ -54,6 +55,27 @@
     }
 }
 
+.search {
+    &__input {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1D1F2E;
+        border: 1px solid #1D1F2E;
+        padding: 5px;
+    }
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
+   
+}
+
 //cart
 .cart-box {
     position: relative;
@@ -74,18 +96,66 @@
 .cart {
     position: absolute;
     display: block;
-    top: 0;
+    top: 30px;
     right: 0;
-    border: 1px solid red;
+    background-color: #fff;
+    width: 300px;
+    border: 1px solid #000;
+    padding: 5px;
+
+    &__inner {
+        display: flex;
+        justify-content: left;
+        margin-bottom: 5px;
+
+        & img {
+            width: 80px;
+        }
+    }
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        width: 180px;
+    }
+
+    &__quantity {
+        margin-left: 0;
+    }
+
+    &__cost {
+        margin-left: 0;
+    }
+
+    & h4 {
+        margin-left: 0;
+    }
+
 }
 
 .del {
     cursor: pointer;
+    margin-left: 0;
+    padding: 3px 10px;
+    font-size: 14px;
+    background-color: #fff;
+    margin-top: 5px;
 }
 
-.invisible {
-    display: none;
+.cart-number {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    padding: 3px 10px;
+    background-color: #1D1F2E;
+    border-radius: 50%;
+
 }
+
+
 
 //inner
 .inner {
@@ -559,7 +629,7 @@
         line-height: 22px;
         color: rgba(29, 31, 46, 0.3);
         margin-left: 0;
-        
+
     }
 
     &__menu {
@@ -567,6 +637,7 @@
         flex-direction: column;
         align-self: flex-start;
         max-width: 147px;
+
         & a {
             text-decoration: none;
             font-weight: 400;
@@ -621,4 +692,10 @@
         color: rgba(29, 31, 46, 0.3);
         margin-left: 0;
     }
+}
+
+
+
+.invisible {
+    display: none;
 }

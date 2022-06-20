@@ -94,6 +94,11 @@ class ListCart extends List {
             this.goods = [obj];
             this.render();
         }
+        let numb = +document.querySelector('.cart-number').textContent + 1;
+        this.getNumberCart(numb);
+        if(this.allproducts){
+            document.querySelector('.cart__empty').remove();
+        }
     }
     toRemove(element) {
         let find = this.allproducts.find(item => item.id == element.dataset.id);
@@ -104,12 +109,27 @@ class ListCart extends List {
             this.allproducts.splice(this.allproducts.indexOf(find), 1);
             document.querySelector(`.cart__inner[data-id="${element.dataset.id}"]`).remove();
         }
+        let numb = +document.querySelector('.cart-number').textContent;
+        if(numb){
+            numb--
+        } else {
+            numb = 0;
+        }
+        this.getNumberCart(numb);
+
+        if(!this.allproducts.length){
+            document.querySelector('.cart').insertAdjacentHTML('afterbegin', '<p class="cart__empty">The basket is empty!</p>'); 
+        }
 
     }
     toUpdateCart(element) {
         let block = document.querySelector(`.cart__inner[data-id="${element.id}"]`);
         block.querySelector('.cart__quantity').textContent = element.quantity;
         block.querySelector('.cart__cost').textContent = element.price * element.quantity;
+
+    }
+    getNumberCart(numb) {
+        document.querySelector('.cart-number').textContent = numb;
     }
 }
 
@@ -143,10 +163,12 @@ class CardCart extends Card {
     render() {
         return `<div class="cart__inner" data-id="${this.id}">
         <img src="img/${this.id}.jpg" alt="some_img">
+        <div class='cart__box'>
         <h4>${this.name}</h4>
-        <p class="cart__quantity">${this.quantity}</p>
-        <p class="cart__cost">${this.price * this.quantity}</p>
+        <p class="cart__quantity">Quantity: ${this.quantity}</p>
+        <p class="cart__cost">Price: ${this.price * this.quantity}</p>
         <button class="del" data-id="${this.id}">X</button>
+        </div>
     </div>`
     }
 }
@@ -158,3 +180,15 @@ const list2 = {
 }
 const cart = new ListCart();
 const page = new ListPage(cart);
+
+//heading
+window.onscroll = function() {myFunction()};
+let header = document.querySelector('.heading-fix');
+let sticky = header.offsetTop;
+function myFunction() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("sticky");
+  } else {
+    header.classList.remove("sticky");
+  }
+}
